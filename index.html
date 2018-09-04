@@ -4,6 +4,9 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Pusdienu polla ģenerators</title>
     <style type="text/css">
+        body {
+            font-family: sans-serif;
+        }
         .floatblock {
             float: left;
             padding: 10px;
@@ -19,11 +22,15 @@
         a {
             color: blue;
         }
+        footer {
+            margin-top: 10px;
+            font-size: small;
+        }
     </style>
 </head>
 <body>
     <div>
-        <b>Lietošanas pamācība:</b> Iekopē tekstu no attiecīgajām lapām un izvāc liekās rindas. Katra rindiņa būs atsevišķs ēdiens.
+        <b>Lietošanas pamācība:</b> Iekopē tekstu no attiecīgajām lapām un izvāc liekās rindas. Katra rindiņa būs atsevišķs ēdiens. Kopēšanas brīdī daļa lieko rindiņu tiek izvāktas automātiski.
     </div>
     <div class="floatblock">
         <div><a href="https://www.facebook.com/OnAirCafeBlaumanu32/" target="restaurant">OnAir</a></div>
@@ -62,6 +69,7 @@
         <div id="results">
         </div>
     </fieldset>
+    <footer>Kaut kas nepatīk? Gribi pielikt savu roku? Dodies uz githubu: <a href="https://github.com/Vilx2/pusdienas">https://github.com/Vilx2/pusdienas</a></footer>
     <script type="text/javascript">
         function scrub(str) {
             var rows = str.split("\n");
