@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Pusdienu polla ģenerators</title>
+    <style type="text/css">
+        .floatblock {
+            float: left;
+            padding: 10px;
+        }
+        fieldset {
+            clear: both;
+            border: 1px solid silver;
+        }
+        #results {
+            font-family: Consolas, Courier-New, monospace;
+            white-space: pre;
+        }
+        a {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <b>Lietošanas pamācība:</b> Iekopē tekstu no attiecīgajām lapām un izvāc liekās rindas. Katra rindiņa būs atsevišķs ēdiens.
+    </div>
+    <div class="floatblock">
+        <div><a href="https://www.facebook.com/OnAirCafeBlaumanu32/" target="restaurant">OnAir</a></div>
+        <div><textarea id="onair" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="https://www.facebook.com/bufetegauja/" target="restaurant">Gauja</a></div>
+        <div><textarea id="gauja" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="http://www.osvaldspupa.lv/" target="restaurant">Osvalds Pupa</a></div>
+        <div><textarea id="osvalds" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="https://www.facebook.com/restaurantgovernment/" target="restaurant">Governments</a></div>
+        <div><textarea id="governments" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="https://www.facebook.com/andaluzijassuns/" target="restaurant">Andalūzijas Suns</a></div>
+        <div><textarea id="suns" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="https://ganbei.lv/ganbei-bl.423.tx" target="restaurant">Gan bei</a></div>
+        <div><textarea id="ganbei" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="http://www.himalayakitchen.lv/" target="restaurant">Himalaji</a></div>
+        <div><textarea id="himalaji" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div>#nearjums</div>
+        <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
+    </div>
+    <fieldset>
+        <legend>Polla kods</legend>
+        <div id="results">
+        </div>
+    </fieldset>
+    <script type="text/javascript">
+        function scrub(str) {
+            var rows = str.split("\n");
+            var rowsOut = [];
+            
+            for ( var i = 0; i < rows.length; i++ ) {
+                var row = rows[i];
+                
+                row = row.replace(/^[\s*\*]*/, ''); // Strip leading "*" and whitespace
+                row = row.replace(/\s*$/g, ''); // Strip tailing whitespace
+                
+                if ( row == '' )    // Remove empty lines
+                    continue;
+                    
+                // ONAIR scrubs
+                    
+                if ( /^[A-Z]+ \(\d{1,2}\.\d{1,2}\.\d{4}\) pusdienu piedāvājums/.test(row) ) // CETURTDIENAS (26.07.2018) pusdienu piedāvājums
+                    continue;
+                    
+                if ( /^\d{1,2}[\.:]\d{1,2}\s*-\s\d{1,2}[\.:]\d{1,2}/.test(row) ) // 11.30- 17.00
+                    continue;
+                    
+                if ( row == 'Pieejams arī aplikācijā Wolt, Ēst.LV' )
+                    continue;
+                    
+                if ( row == '( 1.50/2,50 eur, kopā ar pusdiena otro 0,50eur).' )
+                    continue;
+                    
+                if ( row == 'DIENAS OTRAIS 3.70 EUR' )
+                    continue;
+                    
+                if ( row == 'DIENAS PIEDĀVĀJUMS 3.70 eur' )
+                    continue;
+                    
+                if ( row == 'Pusdienu piedāvājums(nemainīgais) 4.20 eur' )
+                    continue;
+                    
+                    
+                // Gauja scrubs
+                row = row.replace(/^Gaujas pusdienas \d{1,2}\.\d{1,2}: /, ''); // Strip leading "Gaujas pusdienas 02.08: "
+                row = row.replace(/\s*\+\s*padzerties! 4,50€(?: 12:00-16:00)?$/, ''); // Strip trailing "+ padzerties! 4,50€ 12:00-16:00"
+                
+                // Osvalds Pupa scrubs:
+                
+                if ( row == 'Pirmais ēdiens' )
+                    continue;
+                
+                if ( row == 'Otrais ēdiens' )
+                    continue;
+                
+                if ( /^\(Pērkot atsevišķi: €\d+,\d+\)/.test(row) )
+                    continue;
+                    
+                // Governments scrubs:
+                
+                if ( row == 'Labdien, Dārgie Viesi!' )
+                    continue;
+                if ( row == 'Šodien dienas piedāvājumā :' )
+                    continue;
+                if ( row == 'Ņemot kafiju vai tēju -Deserts Bezmaksas!!!' )
+                    continue;
+                if ( row == 'Piedāvājums spekā no 12:00 līdz16:00.')
+                    continue;
+                if ( row == 'Piedāvājuma cena 4.10 eur.')
+                    continue;
+                    
+                row = row.replace(/^Deserts\s*-\s*/, '');
+                row = row.replace(/\s*Piemaksājot 1\s*euro\.$/, ' (+1€)');
+                
+                row = row.replace(/^\s*/, ''); // Strip leading whitespace again
+                row = row.replace(/\s*$/g, ''); // Strip tailing whitespace again
+                if ( row == '' )    // Check for empty lines again.
+                    continue;
+                
+                    
+                rowsOut.push(row);
+            }
+            
+            return rowsOut.join('\n');
+        
+            return str.replace(/^\s*\*?\s*/gm, '').replace(/\n\n/g, '\n').replace(/"/g, "'");
+        }
+        function getOptions(title, id, sb) {
+            var rows = document.getElementById(id).value.split("\n");
+            
+            sb.push(' "*' , title, '*');
+            for ( var i = 0; i < rows.length; i++ ) {
+                var row = rows[i].replace(/^\s*/, '').replace(/\s*$/, '').replace(/"/g, "'");
+                if ( row == '' )
+                    continue;
+                
+                sb.push('\n        • ', row);
+            }
+            sb.push('\n"');
+        }
+        function regen() {
+            var sb = ['/poll "Kur šodien ēdīsim?"'];
+            getOptions('OnAir', 'onair', sb);
+            getOptions('Gauja', 'gauja', sb);
+            getOptions('Osvalds Pupa', 'osvalds', sb);
+            getOptions('Governments', 'governments', sb);
+            getOptions('Andalūzijas suns', 'suns', sb);
+            getOptions('Gan bei', 'ganbei', sb);
+            getOptions('Himalaji', 'himalaji', sb);
+            getOptions('#nearjums', 'nearjums', sb);
+            document.getElementById('results').textContent = sb.join('');
+        }
+        function insertAtCursor(myField, myValue) {
+            //IE support
+            if (document.selection) {
+                myField.focus();
+                sel = document.selection.createRange();
+                sel.text = myValue;
+            }
+            //MOZILLA and others
+            else if (myField.selectionStart || myField.selectionStart == '0') {
+                var startPos = myField.selectionStart;
+                var endPos = myField.selectionEnd;
+                myField.value = myField.value.substring(0, startPos)
+                    + myValue
+                    + myField.value.substring(endPos, myField.value.length);
+            } else {
+                myField.value += myValue;
+            }
+        }
+        
+        var els = document.querySelectorAll('textarea');
+        for ( var i =0; i < els.length; i++ ) {
+            els[i].addEventListener('paste', function(e) {
+                insertAtCursor(e.target, scrub(e.clipboardData.getData('text/plain')));
+                regen();
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            els[i].addEventListener('change', regen);
+            els[i].addEventListener('input', regen);
+        }
+        
+        switch ((new Date()).getDay()) {
+            case 1:
+                document.getElementById('himalaji').value = 'Vista saldskābajā mērcē\nMājas siers ar spinātiem\nLēcu zupa';
+                break;
+            case 2:
+                document.getElementById('himalaji').value = 'Kraukšķīgā vista\nTurku zirņi ar kartupeļiem\nDārzeņu zupa ar citronu un koriandru';
+                break;
+            case 3:
+                document.getElementById('himalaji').value = 'Vistas masala\nDārzeņu masala\nLēcu spinātu zupa';
+                break;
+            case 4:
+                document.getElementById('himalaji').value = 'Vista Szechuan\nSarkanās pupiņas ar spinātiem\nPekinas zupa';
+                break;
+            case 5:
+                document.getElementById('himalaji').value = 'Medus cālis\nMājas siers, zaļie zirņi ar svaigām sēnēm\nDārzeņu makaronu zupa';
+                break;
+        }
+        
+        regen();
+    </script>
+</body>
+</html>
