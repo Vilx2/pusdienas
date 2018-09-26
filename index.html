@@ -49,7 +49,7 @@
         <div><textarea id="governments" cols="80" rows="10"></textarea></div>
     </div>
     <div class="floatblock">
-        <div><a href="https://www.facebook.com/andaluzijassuns/" target="restaurant">Andalūzijas Suns</a></div>
+        <div><a href="https://www.andaluzijassuns.lv/index.php/lv/edienkarte" target="restaurant">Andalūzijas Suns</a></div>
         <div><textarea id="suns" cols="80" rows="10"></textarea></div>
     </div>
     <div class="floatblock">
@@ -59,6 +59,10 @@
     <div class="floatblock">
         <div><a href="http://www.himalayakitchen.lv/" target="restaurant">Himalaji</a></div>
         <div><textarea id="himalaji" cols="80" rows="10"></textarea></div>
+    </div>
+    <div class="floatblock">
+        <div><a href="http://suesasia.lv/" target="restaurant">Asia Today</a></div>
+        <div><textarea id="asiatoday" cols="80" rows="10"></textarea></div>
     </div>
     <div class="floatblock">
         <div>#nearjums</div>
@@ -139,6 +143,21 @@
                 row = row.replace(/^Deserts\s*-\s*/, '');
                 row = row.replace(/\s*Piemaksājot 1\s*euro\.$/, ' (+1€)');
                 
+                // Andalūzijas suns scrubs:
+                if ( row == 'PUSDIENU PIEDĀVĀJUMS' )
+                    continue;
+                if ( row == '*PIEDĀVĀJUMĀ IEKĻAUTA ARĪ SVAIGI CEPTA MAIZĪTE UN GLĀZE MORSS' )
+                    continue;
+                if ( /^\d+,\d+\s+€$/.test(row) ) // 2,50 €
+                    continue;
+               
+                if ( /^[A-ZĀČĒĢĪĶĻŅŌŖŠŪŽ ,]+$/.test(row) ) {// All uppercase
+                    row = row.toLocaleLowerCase();
+                    row = row.charAt(0).toLocaleUpperCase() + row.substr(1);
+                }
+                
+                
+                
                 row = row.replace(/^\s*/, ''); // Strip leading whitespace again
                 row = row.replace(/\s*$/g, ''); // Strip tailing whitespace again
                 if ( row == '' )    // Check for empty lines again.
@@ -174,6 +193,7 @@
             getOptions('Andalūzijas suns', 'suns', sb);
             getOptions('Gan bei', 'ganbei', sb);
             getOptions('Himalaji', 'himalaji', sb);
+            getOptions('Asia Today', 'asiatoday', sb);
             getOptions('#nearjums', 'nearjums', sb);
             document.getElementById('results').textContent = sb.join('');
         }
