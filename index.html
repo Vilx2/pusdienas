@@ -61,10 +61,6 @@
         <div><textarea id="himalaji" cols="80" rows="10"></textarea></div>
     </div>
     <div class="floatblock">
-        <div><a href="http://suesasia.lv/" target="restaurant">Asia Today</a></div>
-        <div><textarea id="asiatoday" cols="80" rows="10"></textarea></div>
-    </div>
-    <div class="floatblock">
         <div>#nearjums</div>
         <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
     </div>
@@ -151,7 +147,7 @@
                 if ( /^\d+,\d+\s+€$/.test(row) ) // 2,50 €
                     continue;
                
-                if ( /^[A-ZĀČĒĢĪĶĻŅŌŖŠŪŽ ,]+$/.test(row) ) {// All uppercase
+                if ( /^[^a-zāčēģīķļņōŗšūž]+$/.test(row) ) {// All uppercase or symbols
                     row = row.toLocaleLowerCase();
                     row = row.charAt(0).toLocaleUpperCase() + row.substr(1);
                 }
@@ -193,7 +189,6 @@
             getOptions('Andalūzijas suns', 'suns', sb);
             getOptions('Gan bei', 'ganbei', sb);
             getOptions('Himalaji', 'himalaji', sb);
-            getOptions('Asia Today', 'asiatoday', sb);
             getOptions('#nearjums', 'nearjums', sb);
             document.getElementById('results').textContent = sb.join('');
         }
