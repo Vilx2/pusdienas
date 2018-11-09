@@ -61,6 +61,10 @@
         <div><textarea id="himalaji" cols="80" rows="10"></textarea></div>
     </div>
     <div class="floatblock">
+        <div><a href="https://www.lido.lv/lv/musu-edieni/pusdienu-mielasts/lido-dzirnavas" target="restaurant">Lido</a></div>
+        <div><textarea id="lido" cols="80" rows="10"></textarea></div>
+    </div>    
+    <div class="floatblock">
         <div>#nearjums</div>
         <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
     </div>
@@ -144,14 +148,32 @@
                     continue;
                 if ( row == '*PIEDĀVĀJUMĀ IEKĻAUTA ARĪ SVAIGI CEPTA MAIZĪTE UN GLĀZE MORSS' )
                     continue;
-                if ( /^\d+,\d+\s+€$/.test(row) ) // 2,50 €
+                if ( /^\d+,\d+\s*€$/.test(row) ) // 2,50 €
                     continue;
                
+                // LIDO scrubs:
+                if ( row == 'LIDO DZIRNAVAS' )
+                    continue;
+                if ( row == 'SVARĪGI!' )
+                    continue;
+                if ( row == 'Dienas piedāvājums var mainīties.' )
+                    continue;
+                if ( row == 'vai' )
+                    continue;
+                if ( row == 'Kefīrs' )
+                    continue;
+                if ( row == 'Multiaugļu sula' )
+                    continue;
+                if ( row == 'Rupjmaize' )
+                    continue;
+                if ( /^\d{2}\. (?:janvārī|februārī|martā|aprīlī|maijā|jūnijā|jūlijā|augustā|septembrī|oktobrī|novembrī|decembrī)$/i.test(row) ) // 2,50 €
+                    continue;
+                    
                 if ( /^[^a-zāčēģīķļņōŗšūž]+$/.test(row) ) {// All uppercase or symbols
                     row = row.toLocaleLowerCase();
                     row = row.charAt(0).toLocaleUpperCase() + row.substr(1);
                 }
-                
+                    
                 
                 
                 row = row.replace(/^\s*/, ''); // Strip leading whitespace again
@@ -189,6 +211,7 @@
             getOptions('Andalūzijas suns', 'suns', sb);
             getOptions('Gan bei', 'ganbei', sb);
             getOptions('Himalaji', 'himalaji', sb);
+            getOptions('Lido', 'lido', sb);
             getOptions('#nearjums', 'nearjums', sb);
             document.getElementById('results').textContent = sb.join('');
         }
