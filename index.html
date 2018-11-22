@@ -186,33 +186,31 @@
             }
             
             return rowsOut.join('\n');
-        
-            return str.replace(/^\s*\*?\s*/gm, '').replace(/\n\n/g, '\n').replace(/"/g, "'");
         }
         function getOptions(title, id, sb) {
             var rows = document.getElementById(id).value.split("\n");
             
-            sb.push(' "*' , title, '*');
+            sb.push(title);
             for ( var i = 0; i < rows.length; i++ ) {
-                var row = rows[i].replace(/^\s*/, '').replace(/\s*$/, '').replace(/["“”]/g, "'");
+                var row = rows[i].replace(/^\s*/, '').replace(/\s*$/, '')/*.replace(/["“”]/g, "'")*/;
                 if ( row == '' )
                     continue;
                 
                 sb.push('\n        • ', row);
             }
-            sb.push('\n"');
+            sb.push('\n');
         }
         function regen() {
-            var sb = ['/poll "Kur šodien ēdīsim?"'];
-            getOptions('OnAir', 'onair', sb);
-            getOptions('Gauja', 'gauja', sb);
-            getOptions('Osvalds Pupa', 'osvalds', sb);
-            getOptions('Governments', 'governments', sb);
-            getOptions('Andalūzijas suns', 'suns', sb);
-            getOptions('Gan bei', 'ganbei', sb);
-            getOptions('Himalaji', 'himalaji', sb);
-            getOptions('Lido', 'lido', sb);
-            getOptions('#nearjums', 'nearjums', sb);
+            var sb = ['*Kur šodien ēdīsim?*\n'];
+            getOptions(':one: *OnAir*', 'onair', sb);
+            getOptions(':two: *Gauja*', 'gauja', sb);
+            getOptions(':three: *Osvalds Pupa*', 'osvalds', sb);
+            getOptions(':four: *Governments*', 'governments', sb);
+            getOptions(':five: *Andalūzijas suns*', 'suns', sb);
+            getOptions(':six: *Gan bei*', 'ganbei', sb);
+            getOptions(':seven: *Himalaji*', 'himalaji', sb);
+            getOptions(':eight: *Lido*', 'lido', sb);
+            getOptions(':no_entry_sign: *#nearjums*', 'nearjums', sb);
             document.getElementById('results').textContent = sb.join('');
         }
         function insertAtCursor(myField, myValue) {
