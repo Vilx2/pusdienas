@@ -65,6 +65,10 @@
         <div><textarea id="lido" cols="80" rows="10"></textarea></div>
     </div>    
     <div class="floatblock">
+        <div><a href="https://www.facebook.com/autentika.b2/" target="restaurant">Autentika</a></div>
+        <div><textarea id="autentika" cols="80" rows="10"></textarea></div>
+    </div>    
+    <div class="floatblock">
         <div>#nearjums</div>
         <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
     </div>
@@ -187,30 +191,33 @@
             
             return rowsOut.join('\n');
         }
-        function getOptions(title, id, sb) {
-            var rows = document.getElementById(id).value.split("\n");
+        
+        function getOptions(title, id, sb, bullets, force) {
+            var rows = document.getElementById(id).value.split("\n").map(function(x) {return x.replace(/^\s*/, '').replace(/\s*$/, ''); }).filter(function(x) {return x != '';});
             
-            sb.push(title);
+            if ( rows.length < 1 && !force ) {
+                return;
+            }
+            
+            sb.push(bullets.shift() + " " + title);
             for ( var i = 0; i < rows.length; i++ ) {
-                var row = rows[i].replace(/^\s*/, '').replace(/\s*$/, '')/*.replace(/["“”]/g, "'")*/;
-                if ( row == '' )
-                    continue;
-                
-                sb.push('\n        • ', row);
+                sb.push('\n        • ', rows[i]);
             }
             sb.push('\n');
         }
         function regen() {
             var sb = ['*Kur šodien ēdīsim?*\n'];
-            getOptions(':one: *OnAir*', 'onair', sb);
-            getOptions(':two: *Gauja*', 'gauja', sb);
-            getOptions(':three: *Osvalds Pupa*', 'osvalds', sb);
-            getOptions(':four: *Governments*', 'governments', sb);
-            getOptions(':five: *Andalūzijas suns*', 'suns', sb);
-            getOptions(':six: *Gan bei*', 'ganbei', sb);
-            getOptions(':seven: *Himalaji*', 'himalaji', sb);
-            getOptions(':eight: *Lido*', 'lido', sb);
-            getOptions(':no_entry_sign: *#nearjums*', 'nearjums', sb);
+            var numbers = [':one:', ':two:', ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:'];
+            
+            getOptions('*OnAir*', 'onair', sb, numbers);
+            getOptions('*Gauja*', 'gauja', sb, numbers);
+            getOptions('*Osvalds Pupa*', 'osvalds', sb, numbers);
+            getOptions('*Governments*', 'governments', sb, numbers);
+            getOptions('*Andalūzijas suns*', 'suns', sb, numbers);
+            getOptions('*Gan bei*', 'ganbei', sb, numbers);
+            getOptions('*Himalaji*', 'himalaji', sb, numbers);
+            getOptions('*Lido*', 'lido', sb, numbers);
+            getOptions('*#nearjums*', 'nearjums', sb, [':no_entry_sign:'], true);
             document.getElementById('results').textContent = sb.join('');
         }
         function insertAtCursor(myField, myValue) {
