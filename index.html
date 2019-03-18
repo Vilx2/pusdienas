@@ -209,14 +209,15 @@
             var sb = ['*Kur šodien ēdīsim?*\n'];
             var numbers = [':one:', ':two:', ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:'];
             
-            getOptions('*OnAir*', 'onair', sb, numbers);
-            getOptions('*Gauja*', 'gauja', sb, numbers);
+            getOptions('*OnAir*', 'onair', sb, [':onair:']);
+            getOptions('*Gauja*', 'gauja', sb,  [':gauja:']);
             getOptions('*Osvalds Pupa*', 'osvalds', sb, numbers);
             getOptions('*Governments*', 'governments', sb, numbers);
             getOptions('*Andalūzijas suns*', 'suns', sb, numbers);
             getOptions('*Gan bei*', 'ganbei', sb, numbers);
             getOptions('*Himalaji*', 'himalaji', sb, numbers);
             getOptions('*Lido*', 'lido', sb, numbers);
+            getOptions('*Autentika*', 'autentika', sb,  [':autentika:']);
             getOptions('*#nearjums*', 'nearjums', sb, [':no_entry_sign:'], true);
             document.getElementById('results').textContent = sb.join('');
         }
