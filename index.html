@@ -69,6 +69,10 @@
         <div><textarea id="autentika" cols="80" rows="10"></textarea></div>
     </div>    
     <div class="floatblock">
+        <div><a href="http://rosemarine.lv/lv" target="restaurant">Rosemarine</a></div>
+        <div><textarea id="rosemarine" cols="80" rows="10"></textarea></div>
+    </div>    
+    <div class="floatblock">
         <div>#nearjums</div>
         <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
     </div>
@@ -99,9 +103,12 @@
                     
                 if ( /^\d{1,2}[\.:]\d{1,2}\s*-\s\d{1,2}[\.:]\d{1,2}/.test(row) ) // 11.30- 17.00
                     continue;
+                
+                if ( /^Dienas piedāvājums.*$/i.test(row) )
+                    continue;
                     
                 if ( row == 'Pieejams arī aplikācijā Wolt, Ēst.LV' )
-                    continue;
+                    continue;                
                     
                 if ( row == '( 1.50/2,50 eur, kopā ar pusdiena otro 0,50eur).' )
                     continue;
@@ -115,10 +122,12 @@
                 if ( row == 'Pusdienu piedāvājums(nemainīgais) 4.20 eur' )
                     continue;
                     
+                row = row.replace(/\s+vai\s+piedevām\s+pēc\s+Jūsu\s+izvēles\s*$/i, '');
                     
                 // Gauja scrubs
                 row = row.replace(/^Gaujas pusdienas \d{1,2}\.\d{1,2}: /, ''); // Strip leading "Gaujas pusdienas 02.08: "
                 row = row.replace(/\s*\+\s*padzerties! 4,50€(?: 12:00-16:00)?$/, ''); // Strip trailing "+ padzerties! 4,50€ 12:00-16:00"
+                row = row.replace(/ł/gi, 'ļ').replace(/ñ/gi, 'ņ').replace(/ì/gi, 'ī');
                 
                 // Osvalds Pupa scrubs:
                 
@@ -127,8 +136,14 @@
                 
                 if ( row == 'Otrais ēdiens' )
                     continue;
+                    
+                if ( row == 'Spied te un pasūti' )
+                    continue;
                 
-                if ( /^\(Pērkot atsevišķi: €\d+,\d+\)/.test(row) )
+                if ( /^Pērkot atsevišķi: €\s*\d+,\d+/.test(row) )
+                    continue;
+                
+                if ( /^\(no \d\d:\d\d līdz \d\d:\d\d\)$/.test(row) )
                     continue;
                     
                 // Governments scrubs:
@@ -148,7 +163,7 @@
                 row = row.replace(/\s*Piemaksājot 1\s*euro\.$/, ' (+1€)');
                 
                 // Andalūzijas suns scrubs:
-                if ( row == 'PUSDIENU PIEDĀVĀJUMS' )
+                if ( /^PUSDIENU PIEDĀVĀJUMS.*$/i.test(row) )
                     continue;
                 if ( row == '*PIEDĀVĀJUMĀ IEKĻAUTA ARĪ SVAIGI CEPTA MAIZĪTE UN GLĀZE MORSS' )
                     continue;
@@ -178,7 +193,16 @@
                     row = row.charAt(0).toLocaleUpperCase() + row.substr(1);
                 }
                     
+                // Autentika scrubs
                 
+                row = row.replace(/^-\s+/, '');
+                
+                // Rosemarine scrubs
+                
+                if ( /^\d+\.\d+ eur$/i.test(row) )
+                    continue;
+                if ( /^(Pirmdiena|Otrdiena|Trešdiena|Ceturtdiena|Piektdiena|Sestdiena|Svētdiena)$/.test(row) )
+                    continue;
                 
                 row = row.replace(/^\s*/, ''); // Strip leading whitespace again
                 row = row.replace(/\s*$/g, ''); // Strip tailing whitespace again
@@ -216,8 +240,9 @@
             getOptions('*Andalūzijas suns*', 'suns', sb, numbers);
             getOptions('*Gan bei*', 'ganbei', sb, numbers);
             getOptions('*Himalaji*', 'himalaji', sb, numbers);
-            getOptions('*Lido*', 'lido', sb, numbers);
+            getOptions('*Lido*', 'lido', sb, numbers);            
             getOptions('*Autentika*', 'autentika', sb,  [':autentika:']);
+            getOptions('*Rosemarine*', 'rosemarine', sb, numbers);
             getOptions('*#nearjums*', 'nearjums', sb, [':no_entry_sign:'], true);
             document.getElementById('results').textContent = sb.join('');
         }
