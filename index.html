@@ -73,6 +73,10 @@
         <div><textarea id="rosemarine" cols="80" rows="10"></textarea></div>
     </div>    
     <div class="floatblock">
+        <div><a href="https://www.facebook.com/texmexriga/" target="restaurant">Tex-Mex</a></div>
+        <div><textarea id="texmex" cols="80" rows="10"></textarea></div>
+    </div>    
+    <div class="floatblock">
         <div>#nearjums</div>
         <div><textarea id="nearjums" cols="80" rows="10"></textarea></div>
     </div>
@@ -243,6 +247,7 @@
             getOptions('*Lido*', 'lido', sb, numbers);            
             getOptions('*Autentika*', 'autentika', sb,  [':autentika:']);
             getOptions('*Rosemarine*', 'rosemarine', sb, numbers);
+            getOptions('*Tex-Mex*', 'texmex', sb, numbers);
             getOptions('*#nearjums*', 'nearjums', sb, [':no_entry_sign:'], true);
             document.getElementById('results').textContent = sb.join('');
         }
